@@ -1,4 +1,4 @@
-package basic.association;
+package basic.aggregation;
 
 
 public class Espresso {
@@ -19,8 +19,8 @@ public class Espresso {
         this.name = name;
     }
 
-    //커피명 보여주기
-    public void display(){
-        System.out.println(this.name);
+    @Override
+    public String toString(){
+        return "Espresso";
     }
 }

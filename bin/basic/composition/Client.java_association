@@ -1,0 +1,15 @@
+package basic.composition;
+
+/**
+ * Client
+ * 연관관계표현
+ */
+public class Client {
+    public static void main(String[] args) {
+        CafeLatte cafeLatte = new CafeLatte; // 생성하면 합성(composition)관계이기 때문에 바로 생성 가능
+
+        cafeLatte.display(); 
+        
+    }
+    
+}

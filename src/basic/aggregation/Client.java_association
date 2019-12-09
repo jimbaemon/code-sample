@@ -1,0 +1,21 @@
+package basic.aggregation;
+
+/**
+ * Client
+ * 연관관계표현
+ */
+public class Client {
+    public static void main(String[] args) {
+        Barista barista = new Barista(); //바리스타 호출
+
+        EspressoMachine espressoMachine = new EspressoMachine(); // 기기 호출 ? 개념이 이상하긴하네
+
+        barista.setEspressoMachine(espressoMachine); // 호출한 기기를 호출한 바리스타에게 전달 
+
+        CafeLatte cafeLatte = barista.makeCafeLatte();
+
+        cafeLatte.display(); 
+        
+    }
+    
+}
