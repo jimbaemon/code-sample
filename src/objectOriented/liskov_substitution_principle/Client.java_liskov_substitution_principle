@@ -1,0 +1,36 @@
+package objectOriented.liskov_substitution_principle;
+
+/**
+ * Client
+ */
+public class Client {
+
+    public static void main(String[] args) {
+        Calculator calculator = new Calculator();
+
+        int firstNumber = 100;
+        int secondNumber = 20;
+
+        AbstractOperation operation = new AddOperation();
+        calculator.setOperation(operation);
+
+        System.out.println(calculator.caculate(firstNumber, secondNumber));
+
+        operation = new SubstractOperation();
+        calculator.setOperation(operation);
+
+        System.out.println(calculator.caculate(firstNumber, secondNumber));
+
+        operation = new MultiplyOperation();
+        calculator.setOperation(operation);
+
+        System.out.println(calculator.caculate(firstNumber, secondNumber));
+
+        //나누기 연산기능 호출
+        secondNumber = 0;
+        operation = new DivideOperation();
+        calculator.setOperation(operation);
+
+        System.out.println(calculator.caculate(firstNumber, secondNumber));
+    }
+}
