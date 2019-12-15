@@ -16,7 +16,7 @@ public class Calculator implements IDisplayable{
     }
 
     @Override
-    public void display(AbstractOperation operation, int firstNumber, int secondNumber){
+    public void newDisplay(AbstractOperation operation, int firstNumber, int secondNumber){
         int answer = operation.operate(firstNumber, secondNumber);
 
         String operator = operation.getOperator();

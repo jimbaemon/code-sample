@@ -5,6 +5,6 @@ package objectOriented.interface_segregation_principle;
  */
 public interface IDisplayable {
 
-    public void display(AbstractOperation operation, int firstNumber, int secondNumber);
+    public void newDisplay(AbstractOperation operation, int firstNumber, int secondNumber);
     
 }

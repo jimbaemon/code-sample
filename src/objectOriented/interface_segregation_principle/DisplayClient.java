@@ -6,6 +6,6 @@ package objectOriented.interface_segregation_principle;
 public class DisplayClient {
 
     public void request(IDisplayable displayable, AbstractOperation operation, int firstNumber, int secondNumber){
-        displayable.display(operation, firstNumber, secondNumber);
+        displayable.newDisplay(operation, firstNumber, secondNumber);
     }
 }
