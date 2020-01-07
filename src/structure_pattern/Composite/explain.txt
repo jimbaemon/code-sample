@@ -1,0 +1,22 @@
+##컴포지트(Compsite)
+- 부분-전체의 관게를 갖는 객체들을 동일한 방식으로 다루는 패턴
+
+#구성요소
+1.Leaf
+ - Component 인터페이스를 구현해야 한다.
+ - 다른요소를 가질수 없다.
+ - Component 인터페이스 중에 add(), remove(), getChild() 같은 메서드는 필요하지 않아도 상속받거나 구현해야 한다.
+ - Composite 객체의 부품으로 설정한다.
+
+2.Composite
+ - Component 인터페이스를 구현해야 한다.
+ - Leaf나 Composite 같은 Component를 구현한 객체를 추가할 수 있다
+ - Component 인터페이스 중에 Leaf와 관련있는 메서드는 필요하지 않아도 상속받거나 구현해야 한다.
+ - 자식 구성요소와 관련된 기능을 구현해야 한다
+
+3.Component
+ - Leaf와 Composite를 동일시하기 위한 공통 인터페이스를 제공한다.
+ - 모든 구성요소들은 Leaf인지 Composite인지를 구별하지 않고 서로 교환해서 사용할 수 있다.
+ - Composite뿐만 아니라 Leaf에 대한 메서드 까지 정의한다.
+
+4. Component 인터페이스를 이용하여 복합 객체 내의 객체들을 조작할 수 잇다.
