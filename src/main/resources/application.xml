@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+<!--
+    INFO : Bean 을 일일이 등록해주는 방식
+    <bean   id="bookService"
+            class="com.study.spring.core.springapplicationcontext.BookService">
+        <property name="bookRepository" ref="bookRepository" />
+    </bean>
+    <bean   id="bookRepository"
+            class="com.study.spring.core.springapplicationcontext.BookRepository"/>-->
+    <!--
+        INFO : @(어노테이션을) 이용하여 빈을 base-package 내부에서 스캐닝 하여 등록 (Spring 2.0부터 지원)
+        @Service
+        @Repository
+    -->
+    <context:component-scan base-package="com.study.spring.core.springapplicationcontext" />
+
+</beans>
