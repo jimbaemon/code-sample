@@ -12,7 +12,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest
+//INFO : 웹과 관련된 테스트만 진행되는 테스트 (거의 Controller 위주 이므로 사용할 클래스를 직접 설정해 줄수도 있음) 컴포넌트에 등록된 클래스만 사용 가능하다
+@WebMvcTest({EventFormatter.class, EventController.class})
 public class EventControllerTest {
 
     @Autowired
