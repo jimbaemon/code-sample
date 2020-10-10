@@ -8,10 +8,11 @@ public class Store extends BaseEntity{
     @Id @GeneratedValue
     @Column(name = "store_id")
     private Long id;
+
     @OneToOne
-    @JoinColumn(name = "staff_id")
-    @Column(name = "manager_staff_id")
+    @JoinColumn(name = "manager_staff_id", referencedColumnName = "staff_id")
     private Staff managerStaff;
+
     @OneToOne
     @JoinColumn(name = "address_id")
     private Address address;

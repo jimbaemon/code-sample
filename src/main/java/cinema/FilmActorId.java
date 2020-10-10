@@ -1,30 +1,27 @@
 package cinema;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class FilmActorId implements Serializable {
 
-    private Long filmId;
-    private Long actorId;
+    private Long film;
+    private Long actor;
 
     public FilmActorId() {
     }
 
-    public FilmActorId(Long filmId, Long actorId) {
-        this.filmId = filmId;
-        this.actorId = actorId;
+    public FilmActorId(Long film, Long actor) {
+        this.film = film;
+        this.actor = actor;
     }
 
-    public Long getFilmId() {
-        return filmId;
+    public Long getFilm() {
+        return film;
     }
 
-    public Long getActorId() {
-        return actorId;
+    public Long getActor() {
+        return actor;
     }
 
     @Override
@@ -32,12 +29,12 @@ public class FilmActorId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FilmActorId that = (FilmActorId) o;
-        return Objects.equals(filmId, that.filmId) &&
-                Objects.equals(actorId, that.actorId);
+        return Objects.equals(film, that.film) &&
+                Objects.equals(actor, that.actor);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(filmId, actorId);
+        return Objects.hash(film, actor);
     }
 }

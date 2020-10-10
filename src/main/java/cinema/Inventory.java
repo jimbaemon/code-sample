@@ -12,8 +12,8 @@ public class Inventory extends BaseEntity{
     @JoinColumn(name = "film_id")
     private Film film;
     @ManyToOne
-    @JoinColumn(name = "rental_id")
-    private Rental rental;
+    @JoinColumn(name = "store_id")
+    private Store store;
 
 
     public Long getId() {
@@ -32,11 +32,11 @@ public class Inventory extends BaseEntity{
         this.film = film;
     }
 
-    public Rental getRental() {
-        return rental;
+    public Store getStore() {
+        return store;
     }
 
-    public void setRental(Rental rental) {
-        this.rental = rental;
+    public void setStore(Store store) {
+        this.store = store;
     }
 }

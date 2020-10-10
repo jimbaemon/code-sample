@@ -7,11 +7,11 @@ import javax.persistence.*;
 @Table(name = "film_category")
 public class FilmCategory extends BaseEntity{
     @Id
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "film_id")
     private Film film;
     @Id
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
