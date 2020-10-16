@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static study.querydsl.entity.QMember.member;
 
 @SpringBootTest
 @Transactional
@@ -56,13 +57,35 @@ public class QuerydslBasicTest {
 
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-        QMember m = new QMember("m");
-
         Member findMember = queryFactory
-                .select(m)
-                .from(m)
-                .where(m.username.eq("member1"))
+                .select(member)
+                .from(member)
+                .where(member.username.eq("member1"))
                 .fetchOne();
+
+        member.username.eq("member1"); //username = 'member1'
+        member.username.ne("member1"); //username != 'member1'
+        member.username.eq("member1").not(); //username != 'member1'
+
+        member.username.isNull(); // member is null
+        member.username.isNotNull(); // member is Not Null
+
+        member.username.isEmpty(); // empty(username)
+        member.username.isNotEmpty(); //not empty(username)
+
+        member.age.in(10, 20); // age in ('10', '20')
+        member.age.notIn(10, 20); // age not in ('10', '20')
+        member.age.between(10, 20); //age between 10 and 20
+
+        member.age.goe(30); // age >= 30
+        member.age.gt(30); // age > 30
+        member.age.loe(30); // age <= 30
+        member.age.lt(30); // age < 30
+
+        member.username.like("member%"); // username like 'member%'
+        member.username.contains("member"); // username contains("member")
+        member.username.startsWith("member"); // username like 'member%'
+
 
         assertThat(findMember.getUsername()).isEqualTo("member1");
     }
