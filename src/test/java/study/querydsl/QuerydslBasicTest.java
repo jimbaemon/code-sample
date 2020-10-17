@@ -120,7 +120,7 @@ public class QuerydslBasicTest {
 
         queryFactory
                 .selectFrom(member)
-                .fetchCount()
+                .fetchCount();
 
     }
 }
