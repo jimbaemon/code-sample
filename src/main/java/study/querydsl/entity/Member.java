@@ -1,7 +1,11 @@
 package study.querydsl.entity;
+<<<<<<< HEAD
 
 import lombok.*;
 
+=======
+import lombok.*;
+>>>>>>> 8b94480cb570227a62481c83cd71696f5b7ef704
 import javax.persistence.*;
 
 @Entity
