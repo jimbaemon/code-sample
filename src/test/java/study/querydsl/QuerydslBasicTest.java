@@ -1,5 +1,6 @@
 package study.querydsl;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,8 +25,12 @@ public class QuerydslBasicTest {
     @Autowired
     EntityManager em;
 
+    JPAQueryFactory queryFactory;
+
     @BeforeEach
     public void before(){
+        queryFactory = new JPAQueryFactory(em);
+
         Team teamA = new Team("teamA");
         Team teamB = new Team("teamB");
         em.persist(teamA);
@@ -55,14 +60,16 @@ public class QuerydslBasicTest {
     @Test
     public void startQuerydsl(){
 
-        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
-
+        //member1을 찾아라.
         Member findMember = queryFactory
                 .select(member)
                 .from(member)
-                .where(member.username.eq("member1"))
+                .where(
+                        member.username.eq("member1"),
+                        member.age.eq(10).or(member.age.eq(20))
+                )
                 .fetchOne();
-
+/*
         member.username.eq("member1"); //username = 'member1'
         member.username.ne("member1"); //username != 'member1'
         member.username.eq("member1").not(); //username != 'member1'
@@ -84,9 +91,36 @@ public class QuerydslBasicTest {
 
         member.username.like("member%"); // username like 'member%'
         member.username.contains("member"); // username contains("member")
-        member.username.startsWith("member"); // username like 'member%'
+        member.username.startsWith("member"); // username like 'member%'*/
 
 
         assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    public void resultFetch(){
+        //목록 조회
+        List<Member> fetch = queryFactory
+                .selectFrom(member)
+                .fetch();
+
+        //단건 조회 두건이상일 경우 Exception
+        Member fetchOne = queryFactory
+                .selectFrom(member)
+                .fetchOne();
+
+        //목록중 한건 조회 limit(1).fetchOne(); 과 동일
+        Member fetchFirst = queryFactory
+                .selectFrom(member)
+                .fetchFirst();
+
+        QueryResults<Member> memberQueryResults = queryFactory
+                .selectFrom(member)
+                .fetchResults();
+
+        queryFactory
+                .selectFrom(member)
+                .fetchCount()
+
     }
 }
