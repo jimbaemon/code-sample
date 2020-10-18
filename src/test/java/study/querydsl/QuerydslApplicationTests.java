@@ -2,7 +2,9 @@ package study.querydsl;
 
 import com.querydsl.core.QueryFactory;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.assertj.core.api.Assertions;
@@ -127,19 +129,19 @@ class QuerydslApplicationTests {
      * 나이가 가장 많은 회원 조회
      */
     @Test
-    public void subQueryGoe(){
+    public void subQueryEq(){
         QMember memberSub = new QMember("memberSub");
 
         List<Member> result = queryFactory
                 .selectFrom(member)
-                .where(member.age.goe(
-                        select(memberSub.age.avg())
+                .where(member.age.eq(
+                        select(memberSub.age.max())
                                 .from(memberSub)
                 ))
                 .fetch();
 
         assertThat(result).extracting("age")
-                .containsExactly(30, 40);
+                .containsExactly(40);
     }
 
 
@@ -197,6 +199,42 @@ class QuerydslApplicationTests {
     }
 
     @Test
+    public void complicateCase(){
+        List<String> result = queryFactory
+                .select(new CaseBuilder()
+                        .when(member.age.between(0, 20)).then("0~20살")
+                        .when(member.age.between(21, 30)).then("21~30살")
+                        .otherwise("기타"))
+                .from(member)
+                .fetch();
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
+    
+    @Test
+    public void orderByCase(){
+        NumberExpression<Integer> rank = new CaseBuilder()
+                .when(member.age.between(21, 30)).then(1)
+                .when(member.age.between(0, 20)).then(2)
+                .otherwise(3);
+
+        List<Tuple> result = queryFactory
+                .select(member.username, member.age, rank)
+                .from(member)
+                .orderBy(rank.desc())
+                .fetch();
+
+        for (Tuple tuple : result) {
+            String username = tuple.get(member.username);
+            Integer age = tuple.get(member.age);
+            Integer rankDesc = tuple.get(rank);
+            System.out.println("username = " + username + " age = " + age + " rank = "
+                    + rankDesc);
+        }
+    }
+
+    @Test
     public void constant(){
         List<Tuple> a = queryFactory
                 .select(member.username, Expressions.constant("A"))
@@ -211,7 +249,8 @@ class QuerydslApplicationTests {
     @Test
     public void concat(){
         List<String> fetch = queryFactory
-                .select(member.username.concat("_").concat(member.age.stringValue()))
+                //.select(member.username.concat("_").concat(member.age)) //concat 에서는 문자열만 사용 가능하므로 에러 발생
+                .select(member.username.concat("_").concat(member.age.stringValue())) //문자형으로 변환할려면 .stringValue() 함수를 이용하면 된다.
                 .from(member)
                 .where(member.username.eq("member1"))
                 .fetch();
