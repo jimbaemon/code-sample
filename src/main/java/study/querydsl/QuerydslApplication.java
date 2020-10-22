@@ -8,7 +8,7 @@ public class QuerydslApplication {
 
     public static void main(String[] args) {
         System.out.println("test");
-        SpringApplication.run(QuerydslApplication.class, args);
+        SpringApplication.run(QuerydslApplication.class,  args);
     }
 
 }
