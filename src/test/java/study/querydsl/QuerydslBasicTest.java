@@ -75,8 +75,7 @@ public class QuerydslBasicTest {
                 .select(member)
                 .from(member)
                 .where(
-                        member.username.eq("member1"),
-                        member.age.eq(10).or(member.age.eq(20))
+                        member.username.eq("m")
                 )
                 .fetchOne();
 /*
@@ -350,6 +349,6 @@ public class QuerydslBasicTest {
                 .select(member.username)
                 .from(member)
                 .where(member.username.eq(member.username.lower()))
-                .fetch()
+                .fetch();
     }
 }

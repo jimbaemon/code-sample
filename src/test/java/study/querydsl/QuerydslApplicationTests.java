@@ -259,4 +259,16 @@ class QuerydslApplicationTests {
             System.out.println("s = " + s);
         }
     }
+
+    @Test
+    public void orderAsc(){
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .orderBy(member.username.asc().nullsLast())
+                .fetch();
+
+        for (Member member1 : result) {
+            System.out.println("member1 = " + member1);
+        }
+    }
 }
