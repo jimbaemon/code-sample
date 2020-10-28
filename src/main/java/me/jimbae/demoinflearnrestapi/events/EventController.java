@@ -1,9 +1,12 @@
 package me.jimbae.demoinflearnrestapi.events;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,14 +22,18 @@ public class EventController {
 
     private final EventRepository eventRepository;
 
-    public EventController(EventRepository eventRepository){
+    private final ModelMapper modelMapper;
+
+    public EventController(EventRepository eventRepository, ModelMapper modelMapper){
         this.eventRepository = eventRepository;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping
-    public ResponseEntity createEvent(@RequestBody Event event){
+    public ResponseEntity createEvent(@RequestBody EventDto eventDto){
+        Event event = modelMapper.map(eventDto, Event.class);
         Event save = this.eventRepository.save(event);
         URI createdUri  = linkTo(EventController.class).slash(save.getId()).toUri();
-        return ResponseEntity.created(createdUri).body(event) ;
+        return ResponseEntity.created(createdUri).body(save) ;
     }
 }

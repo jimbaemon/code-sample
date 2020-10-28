@@ -1,16 +1,15 @@
 package me.jimbae.demoinflearnrestapi.events;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
-@Builder @EqualsAndHashCode(of = "id")
-@Entity
-public class Event {
-    @Id @GeneratedValue
-    private int id;
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
+public class EventDto {
+
     private String name; //이름
     private String description; //설명
     private LocalDateTime beginEnrollmentDateTime; //등록시작일시
@@ -21,10 +20,5 @@ public class Event {
     private int basePrice; // (optional) //참가비
     private int maxPrice; // (optional) // 경매비 0이면 무료 or 무제한
     private int limitOfEnrollment; //등록 제한
-    private boolean offline;
-    private boolean free;
-    @Enumerated(EnumType.STRING)
-    private EventStatus eventStatus = EventStatus.DRAFT;
-
 
 }
