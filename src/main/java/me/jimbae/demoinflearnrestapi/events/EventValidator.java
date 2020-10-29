@@ -10,14 +10,13 @@ public class EventValidator {
 
     public void validate(EventDto eventDto, Errors errors){
         if(eventDto.getBasePrice() > eventDto.getMaxPrice() && eventDto.getMaxPrice() > 0){
-            errors.rejectValue("basePrice", "wrongValue", "BasePrice 는 MaxPrice 보다 높을수 없습니다.");
-            errors.rejectValue("maxPrice", "wrongValue", "MaxPrice 는 BasePrice 보다 낮을수 없습니다.");
+            errors.reject("wrongPrice", "가격을 잘못 입력 하였습니다.");
         }
         
         LocalDateTime endEventDateTime = eventDto.getEndEventDateTime();
         if(endEventDateTime.isBefore(eventDto.getBeginEnrollmentDateTime()) ||
             endEventDateTime.isBefore(eventDto.getCloseEnrollmentDateTime()) ||
-            endEventDateTime.isBefore(eventDto.getBeginEnrollmentDateTime())
+            endEventDateTime.isBefore(eventDto.getBeginEventDateTime())
         ){
             errors.rejectValue("endEventDateTime", "wrongValue", "endEventDateTime 값이 잘못 되었습니다.");
         }

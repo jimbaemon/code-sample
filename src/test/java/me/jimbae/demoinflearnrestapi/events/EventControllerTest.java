@@ -39,6 +39,7 @@ public class EventControllerTest {
     public void createEvent() throws Exception {
         EventDto event = EventDto.builder()
                 .name("REST API Development with Spring")
+                .description("설명이 없네")
                 .beginEnrollmentDateTime(LocalDateTime.of(2018, 11, 23, 14, 21))
                 .closeEnrollmentDateTime(LocalDateTime.of(2018, 11, 23, 14, 21))
                 .beginEventDateTime(LocalDateTime.of(2018, 11, 25, 14, 21))
@@ -61,7 +62,8 @@ public class EventControllerTest {
                 .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("id").value(Matchers.not(100)))
-                .andExpect(jsonPath("free").value(Matchers.not(true)))
+                .andExpect(jsonPath("free").value(false))
+                .andExpect(jsonPath("offline").value(true))
                 .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
 
         ;
@@ -112,10 +114,11 @@ public class EventControllerTest {
     public void createEvent_Bad_Request_Wrong_Input() throws Exception {
         EventDto eventDto = EventDto.builder()
                 .name("REST API Development with Spring")
+                .description("너 어디갔냐 ? ")
                 .beginEnrollmentDateTime(LocalDateTime.of(2018, 11, 24, 14, 21))
                 .closeEnrollmentDateTime(LocalDateTime.of(2018, 11, 23, 14, 21))
                 .beginEventDateTime(LocalDateTime.of(2018, 11, 27, 14, 21))
-                .endEventDateTime(LocalDateTime.of(2018, 11, 26, 14, 21))
+                .endEventDateTime(LocalDateTime.of(2018, 11, 21, 14, 21))
                 .basePrice(1000)
                 .maxPrice(200)
                 .limitOfEnrollment(100)
@@ -125,7 +128,11 @@ public class EventControllerTest {
         mockMvc.perform(post("/api/events/")
                     .contentType(MediaType.APPLICATION_JSON_UTF8)
                     .content(this.objectMapper.writeValueAsString(eventDto)))
+                .andDo(print())
                 .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$[0].objectName").exists())
+                .andExpect(jsonPath("$[0].defaultMessage").exists())
+                .andExpect(jsonPath("$[0].code").exists())
         ;
     }
 
