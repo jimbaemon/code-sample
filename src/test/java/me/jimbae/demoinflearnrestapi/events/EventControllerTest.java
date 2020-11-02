@@ -1,24 +1,37 @@
 package me.jimbae.demoinflearnrestapi.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.jimbae.demoinflearnrestapi.common.RestDocConfiguration;
 import me.jimbae.demoinflearnrestapi.common.TestDescription;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.print.attribute.standard.Media;
 import java.time.LocalDateTime;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -26,6 +39,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs
+@Import(RestDocConfiguration.class)
 public class EventControllerTest {
 
     @Autowired
@@ -69,6 +84,58 @@ public class EventControllerTest {
                 .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.query-events").exists())
                 .andExpect(jsonPath("_links.update-event").exists())
+                //REST DOCS 추가
+                .andDo(document("create-event",
+                        //링크 문서화
+                        links(
+                            linkWithRel("self").description("link to self"),
+                            linkWithRel("query-events").description("link to query events"),
+                            linkWithRel("update-event").description("link to update an existing event")
+                        ),
+                        //request 헤더 문서화
+                        requestHeaders(
+                            headerWithName(HttpHeaders.ACCEPT).description("accept header"),
+                            headerWithName(HttpHeaders.CONTENT_TYPE).description("content type header")
+                        ),
+                        //request 변수 문서화
+                        requestFields(
+                                fieldWithPath("name").description("Name of new event"),
+                                fieldWithPath("description").description("description of new event"),
+                                fieldWithPath("beginEnrollmentDateTime").description("등록 시작일시"),
+                                fieldWithPath("closeEnrollmentDateTime").description("등록 마감일시"),
+                                fieldWithPath("beginEventDateTime").description("이벤트 시작일시"),
+                                fieldWithPath("endEventDateTime").description("이벤트 종료일시"),
+                                fieldWithPath("location").description("이게 없으면 온라인 모임"),
+                                fieldWithPath("basePrice").description("참가비"),
+                                fieldWithPath("maxPrice").description("경매비 0이면 무료 or 무제한"),
+                                fieldWithPath("limitOfEnrollment").description("등록 제한")
+                        ),
+                        //response header 명시
+                        responseHeaders(
+                                headerWithName(HttpHeaders.LOCATION).description("Location header"),
+                                headerWithName(HttpHeaders.CONTENT_TYPE).description("Content Type")
+                        ),
+                        //응답 필드에 대한 문서화
+                        responseFields( // relaxedResponseFields : 문서 일부분만 테스트 가능하도록 하는 함수 (단점 : 검증이 안됨)
+                                fieldWithPath("id").description("identifier of new event"),
+                                fieldWithPath("name").description("Name of new event"),
+                                fieldWithPath("description").description("description of new event"),
+                                fieldWithPath("beginEnrollmentDateTime").description("등록 시작일시"),
+                                fieldWithPath("closeEnrollmentDateTime").description("등록 마감일시"),
+                                fieldWithPath("beginEventDateTime").description("이벤트 시작일시"),
+                                fieldWithPath("endEventDateTime").description("이벤트 종료일시"),
+                                fieldWithPath("location").description("이게 없으면 온라인 모임"),
+                                fieldWithPath("basePrice").description("참가비"),
+                                fieldWithPath("maxPrice").description("경매비 0이면 무료 or 무제한"),
+                                fieldWithPath("limitOfEnrollment").description("등록 제한"),
+                                fieldWithPath("free").description("무료 여부"),
+                                fieldWithPath("offline").description("오프라인 여부"),
+                                fieldWithPath("eventStatus").description("event status"),
+                                fieldWithPath("_links.self.href").description("link to self"),
+                                fieldWithPath("_links.query-events.href").description("link to query events"),
+                                fieldWithPath("_links.update-event.href").description("link to update an existing event")
+                        )
+                ))
         ;
     }
 
