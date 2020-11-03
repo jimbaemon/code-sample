@@ -84,13 +84,16 @@ public class EventControllerTest {
                 .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.query-events").exists())
                 .andExpect(jsonPath("_links.update-event").exists())
-                //REST DOCS 추가
+                //Self Descriptive
+                .andExpect(jsonPath("_links.profile").exists())
+                //REST DOCS 추가 나오는 파라미터에 대한 설명이 없을시 에러가 난다.
                 .andDo(document("create-event",
                         //링크 문서화
                         links(
                             linkWithRel("self").description("link to self"),
                             linkWithRel("query-events").description("link to query events"),
-                            linkWithRel("update-event").description("link to update an existing event")
+                            linkWithRel("update-event").description("link to update an existing event"),
+                            linkWithRel("profile").description("link to update an existing event")
                         ),
                         //request 헤더 문서화
                         requestHeaders(
@@ -133,7 +136,8 @@ public class EventControllerTest {
                                 fieldWithPath("eventStatus").description("event status"),
                                 fieldWithPath("_links.self.href").description("link to self"),
                                 fieldWithPath("_links.query-events.href").description("link to query events"),
-                                fieldWithPath("_links.update-event.href").description("link to update an existing event")
+                                fieldWithPath("_links.update-event.href").description("link to update existing event"),
+                                fieldWithPath("_links.profile.href").description("link to profile")
                         )
                 ))
         ;
