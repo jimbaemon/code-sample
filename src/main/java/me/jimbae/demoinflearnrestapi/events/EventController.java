@@ -1,6 +1,7 @@
 package me.jimbae.demoinflearnrestapi.events;
 
 import me.jimbae.demoinflearnrestapi.common.ErrorsResource;
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -85,6 +86,34 @@ public class EventController {
         EventResource body = new EventResource(event);
         body.add(new Link("/docs/index.html#resources-events-get").withRel("profile"));
         return ResponseEntity.ok().body(body);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity patchEvents(@PathVariable Integer id, @RequestBody @Valid EventDto eventDto, Errors errors){
+        if(errors.hasErrors()){
+            return badRequest(errors);
+        }
+
+        eventValidator.validate(eventDto, errors);
+
+        if(errors.hasErrors()){
+            return badRequest(errors);
+        }
+
+        Optional<Event> eventById = this.eventRepository.findById(id);
+
+        if(eventById.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = eventById.get();
+        modelMapper.map(eventDto, event);
+        this.eventRepository.flush();
+        EventResource body = new EventResource(event);
+        body.add(new Link("/docs/index.html#resources-events-update").withRel("profile"));
+
+        return ResponseEntity.ok(body);
+
     }
 
     private ResponseEntity<ErrorsResource> badRequest(Errors errors) {
