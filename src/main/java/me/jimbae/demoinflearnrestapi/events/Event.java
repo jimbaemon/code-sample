@@ -1,9 +1,11 @@
 package me.jimbae.demoinflearnrestapi.events;
 
 import lombok.*;
+import me.jimbae.demoinflearnrestapi.accounts.Account;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 @Builder @EqualsAndHashCode(of = "id")
@@ -25,6 +27,9 @@ public class Event {
     private boolean free;
     @Enumerated(EnumType.STRING)
     private EventStatus eventStatus = EventStatus.DRAFT;
+
+    @ManyToOne
+    private Account manager;
 
 
     public void update() {
