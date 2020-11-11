@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations()); //스프링에서 제공해주는 모든 정적영역 출력
     }
 /*스프링 시큐리티를 타서 권한을 검사*/
-   @Override
+/*   @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .anonymous()
@@ -61,5 +61,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .mvcMatchers(HttpMethod.GET, "/api/**").anonymous()
                     .anyRequest().authenticated();
-    }
+    }*/
 }
