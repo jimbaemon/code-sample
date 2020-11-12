@@ -6,6 +6,7 @@ import me.jimbae.demoinflearnrestapi.accounts.Account;
 import me.jimbae.demoinflearnrestapi.accounts.AccountRespository;
 import me.jimbae.demoinflearnrestapi.accounts.AccountRole;
 import me.jimbae.demoinflearnrestapi.accounts.AccountService;
+import me.jimbae.demoinflearnrestapi.common.AppProperties;
 import me.jimbae.demoinflearnrestapi.common.BaseControllerTest;
 import me.jimbae.demoinflearnrestapi.common.RestDocConfiguration;
 import me.jimbae.demoinflearnrestapi.common.TestDescription;
@@ -63,30 +64,22 @@ public class EventControllerTest extends BaseControllerTest {
     @Autowired
     AccountRespository accountRespository;
 
-    @Before
+    @Autowired
+    AppProperties appProperties;
+
+/*    @Before
     public void setUp(){
         this.eventRepository.deleteAll();
         this.accountRespository.deleteAll();
-    }
+    }*/
 
     public String getAuthToken() throws Exception {
         //Given
-        String username = "jimbae@gmail.com";
-        String password = "jimbae";
-        Account jimbae = Account.builder()
-                .email(username)
-                .password(password)
-                .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
-                .build();
-        this.accountService.saveAccount(jimbae);
-
-        String clientId = "myApp";
-        String clientSecret = "pass";
 
         ResultActions perform = this.mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(clientId, clientSecret))
-                .param("username", username)
-                .param("password", password)
+                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
+                .param("username", appProperties.getUserUsername())
+                .param("password", appProperties.getUserPassword())
                 .param("grant_type", "password")
         );
 

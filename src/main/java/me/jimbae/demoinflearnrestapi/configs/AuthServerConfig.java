@@ -1,6 +1,7 @@
 package me.jimbae.demoinflearnrestapi.configs;
 
 import me.jimbae.demoinflearnrestapi.accounts.AccountService;
+import me.jimbae.demoinflearnrestapi.common.AppProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +29,9 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     TokenStore tokenStore;
 
+    @Autowired
+    AppProperties appProperties;
+
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security.passwordEncoder(passwordEncoder);
@@ -36,10 +40,10 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("myApp") //아이디
+                .withClient(appProperties.getClientId()) //아이디
                 .authorizedGrantTypes("password", "refresh_token") //GrantType && refresh Token 을 통해 신규 Token 발급 하는 방식
                 .scopes("read", "write")
-                .secret(this.passwordEncoder.encode("pass")) // 비밀번호
+                .secret(this.passwordEncoder.encode(appProperties.getClientSecret())) // 비밀번호
                 .accessTokenValiditySeconds(10 * 60) //10분
                 .refreshTokenValiditySeconds(6 * 10 * 60); //1시간
     }

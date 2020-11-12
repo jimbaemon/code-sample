@@ -3,6 +3,7 @@ package me.jimbae.demoinflearnrestapi.configs;
 import me.jimbae.demoinflearnrestapi.accounts.Account;
 import me.jimbae.demoinflearnrestapi.accounts.AccountRole;
 import me.jimbae.demoinflearnrestapi.accounts.AccountService;
+import me.jimbae.demoinflearnrestapi.common.AppProperties;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -34,14 +35,24 @@ public class AppConfig {
             @Autowired
             AccountService accountService;
 
+            @Autowired
+            AppProperties appProperties;
+
             @Override
             public void run(ApplicationArguments args) throws Exception {
-/*                Account jimbae = Account.builder()
-                        .email("jimbae@gmail.com")
-                        .password("jimbae")
+                Account admin = Account.builder()
+                        .email(appProperties.getAdminUsername())
+                        .password(appProperties.getAdminPassword())
                         .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                         .build();
-                accountService.saveAccount(jimbae);*/
+                accountService.saveAccount(admin);
+
+                Account user = Account.builder()
+                        .email(appProperties.getUserUsername())
+                        .password(appProperties.getUserPassword())
+                        .roles(Set.of(AccountRole.USER))
+                        .build();
+                accountService.saveAccount(user);
             }
         };
     }
