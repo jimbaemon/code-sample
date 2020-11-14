@@ -1,24 +1,19 @@
 package me.jimbae.demoinflearnrestapi.configs;
 
-import me.jimbae.demoinflearnrestapi.accounts.Account;
-import me.jimbae.demoinflearnrestapi.accounts.AccountRole;
 import me.jimbae.demoinflearnrestapi.accounts.AccountService;
 import me.jimbae.demoinflearnrestapi.common.AppProperties;
-import me.jimbae.demoinflearnrestapi.common.BaseControllerTest;
-import me.jimbae.demoinflearnrestapi.common.TestDescription;
-import org.junit.Test;
+import me.jimbae.demoinflearnrestapi.common.BaseTest;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Set;
-
-import static org.junit.Assert.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class AuthServerConfigTest extends BaseControllerTest {
+public class AuthServerConfigTest extends BaseTest {
 
     @Autowired
     AccountService accountService;
@@ -27,7 +22,7 @@ public class AuthServerConfigTest extends BaseControllerTest {
     AppProperties appProperties;
 
     @Test
-    @TestDescription("인증 토큰을 발급 받는 테스트")
+    @DisplayName("인증 토큰을 발급 받는 테스트")
     public void getAuthToken() throws Exception {
 
 

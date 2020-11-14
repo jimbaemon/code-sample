@@ -1,7 +1,10 @@
 package me.jimbae.demoinflearnrestapi.index;
 
+import me.jimbae.demoinflearnrestapi.accounts.AccountRespository;
+import me.jimbae.demoinflearnrestapi.common.BaseTest;
 import me.jimbae.demoinflearnrestapi.common.RestDocConfiguration;
-import org.junit.Test;
+import org.junit.Before;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -18,16 +21,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
-@AutoConfigureRestDocs
-@Import(RestDocConfiguration.class)
-@ActiveProfiles("test")
-public class IndexControllerTest {
+public class IndexControllerTest extends BaseTest {
 
     @Autowired
     MockMvc mockMvc;
+    @Autowired
+    AccountRespository accountRespository;
+
+
 
     @Test
     public void index() throws Exception{
