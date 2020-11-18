@@ -1,5 +1,6 @@
 package hello.core.order;
 
+import hello.core.discount.RateDiscountPolicy;
 import hello.core.member.Grade;
 import hello.core.member.Member;
 import hello.core.member.MemberService;
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.Test;
 public class OrderServiceTest {
 
     MemberService memberService = new MemberServiceImpl();
-    OrderService orderService = new OrderServiceImpl();
+    OrderService orderService = new OrderServiceImpl(new RateDiscountPolicy());
 
     @Test
     void createOrder() {

@@ -1,5 +1,6 @@
 package hello.core;
 
+import hello.core.discount.RateDiscountPolicy;
 import hello.core.member.Grade;
 import hello.core.member.Member;
 import hello.core.member.MemberService;
@@ -12,7 +13,7 @@ public class OrderApp {
 
     public static void main(String[] args) {
         MemberService memberService = new MemberServiceImpl();
-        OrderService orderService = new OrderServiceImpl();
+        OrderService orderService = new OrderServiceImpl(new RateDiscountPolicy());
 
         Long memberId = 1L;
         Member member = new Member(memberId, "memberA", Grade.VIP);
