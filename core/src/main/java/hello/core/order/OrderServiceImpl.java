@@ -12,15 +12,39 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderServiceImpl implements OrderService{
 
+    //@Autowired //필드 Autowired 시 테스트에 Repository 할당 방법이 없다.....
     private final MemberRepository  memberRepository;
-    //private final DiscountPolicy discountPolicy = new FixDiscountPolicy();
+    //private  DiscountPolicy discountPolicy = new FixDiscountPolicy();
+    //@Autowired
     private final DiscountPolicy discountPolicy;
+
+/*    
+    //수정자 주입
+    @Autowired(required = false) //구지 필요 없어
+    public void setMemberRepository(MemberRepository memberRepository) {
+        System.out.println("SetterMemberRepository = " + memberRepository);
+        this.memberRepository = memberRepository;
+    }
+
+    @Autowired
+    public void setDiscountPolicy(DiscountPolicy discountPolicy) {
+        System.out.println("SetterDiscountPolicy = " + discountPolicy);
+        this.discountPolicy = discountPolicy;
+    }*/
 
     @Autowired
     public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        System.out.println("memberRepository = " + memberRepository);
+        System.out.println("discountPolicy = " + discountPolicy);
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
     }
+
+/*    @Autowired // 일반 메서드에서도 Autowired 사용 가능
+    public void init(MemberRepository memberRepository, DiscountPolicy discountPolicy){
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }*/
 
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
