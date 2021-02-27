@@ -1,4 +1,4 @@
-#스프링 SQLException 반환처리 테스트용 프로젝트
+# 스프링 SQLException 반환처리 테스트용 프로젝트
 
 ## 제작 계기
 - 프로젝트 진행중에 SQLException 에 대한 catch 작업이 제대로 안되는 에러를 발견했다.
