@@ -1,0 +1,34 @@
+package objectOriented.single_responsibility_principle;
+
+/**
+ * Client
+ */
+public class Client {
+    public static void main(String[] args) {
+        Calculator calculator = new Calculator();
+        
+        calculator.setAddOperation(new AddOperation());
+        calculator.setSubstractOperation(new SubstractOperation());
+        calculator.setMultiplyOperation(new MultiplyOperation());
+
+        int firstNumber = 100;
+        int secondNumber = 20;
+
+        String operator ="+";
+        int answer = calculator.caclulate(operator, firstNumber, secondNumber);
+        System.out.println(answer);
+       
+        operator ="-";
+        answer = calculator.caclulate(operator, firstNumber, secondNumber);
+        System.out.println(answer);
+        
+        operator ="*";
+        answer = calculator.caclulate(operator, firstNumber, secondNumber);
+        System.out.println(answer);
+
+        operator ="/";
+        answer = calculator.caclulate(operator, firstNumber, secondNumber);
+        System.out.println(answer);
+        
+    }
+}

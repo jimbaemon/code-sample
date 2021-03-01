@@ -1,0 +1,32 @@
+package structure_pattern.decorator;
+
+/**
+ * Client
+ */
+public class Client {
+
+    public static void main(String[] args) {
+        
+        Calculator calculator = new Calculator();
+
+        int firstNumber = 80;
+        int secondNumber = 20;
+
+        NumberExpression firstNumberEquation = new NumberExpression(firstNumber);
+        calculator.setExpression(firstNumberEquation);
+        
+        NumberExpression secondNumberEquation = new NumberExpression(secondNumber);
+        calculator.setExpression(secondNumberEquation);
+
+        AbstractOperationExpression addOperationEquation = new AddOperationExpression();
+        addOperationEquation.addOperandExpresion(firstNumberEquation);
+        addOperationEquation.addOperandExpresion(secondNumberEquation);
+        calculator.setExpression(addOperationEquation);
+
+        System.out.println(calculator.calculate());
+
+        calculator.setExpression(new FracDecoratorExpression(addOperationEquation));
+
+        System.out.println(calculator.calculate());
+    }
+}

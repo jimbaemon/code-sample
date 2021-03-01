@@ -1,0 +1,17 @@
+package structure_pattern.facade;
+
+/**
+ * Client
+ */
+public class Client {
+
+    public static void main(String[] args) {
+        CalculatorFacade calculator = new CalculatorFacade();
+
+        String[] expression = {"100+20", "100-20", "100*20", "100/20"};
+
+        for(int i=0;i<expression.length;i++){
+            calculator.calculate(expression[i]); 
+        }
+    }
+}

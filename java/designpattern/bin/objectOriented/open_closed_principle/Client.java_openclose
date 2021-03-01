@@ -1,0 +1,34 @@
+package objectOriented.open_closed_principle;
+
+/**
+ * Client
+ */
+public class Client {
+
+    public static void main(String[] args) {
+        Calculator calculator = new Calculator();
+
+        int firstNumber = 100;
+        int secondNumber = 20;
+
+        AbstractOperation operation = new AddOperation();
+        calculator.setOperation(operation);
+
+        System.out.println(calculator.caculate(firstNumber, secondNumber));
+
+        operation = new SubstractOperation();
+        calculator.setOperation(operation);
+
+        System.out.println(calculator.caculate(firstNumber, secondNumber));
+
+        operation = new MultiplyOperation();
+        calculator.setOperation(operation);
+
+        System.out.println(calculator.caculate(firstNumber, secondNumber));
+
+        operation = new DivideOperation();
+        calculator.setOperation(operation);
+
+        System.out.println(calculator.caculate(firstNumber, secondNumber));
+    }
+}
