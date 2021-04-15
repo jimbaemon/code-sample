@@ -3,6 +3,7 @@ package sample.datajpa.repository;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -113,6 +114,19 @@ class MemberRepositoryTest {
 		List<MemberDTO> memberDto = memberRepository.findMemberDto();
 		for (MemberDTO memberDTO : memberDto) {
 			System.out.println("memberDTO = " + memberDTO);
+		}
+	}
+
+	@Test
+	public void testfindByMemberNames(){
+		Member m1 = new Member("AAA", 10);
+		Member m2 = new Member("AAA", 20);
+		memberRepository.save(m1);
+		memberRepository.save(m2);
+
+		List<Member> findMember = memberRepository.findByNames(Arrays.asList("AAA", "BBB"));
+		for (Member member : findMember) {
+			System.out.println("member = " + member);
 		}
 	}
 }
