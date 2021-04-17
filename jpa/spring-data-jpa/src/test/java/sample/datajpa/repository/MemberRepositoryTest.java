@@ -10,6 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Description;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import sample.datajpa.dto.MemberDTO;
@@ -128,5 +132,36 @@ class MemberRepositoryTest {
 		for (Member member : findMember) {
 			System.out.println("member = " + member);
 		}
+	}
+
+	@Test
+	public void paging(){
+		//given
+		memberRepository.save(new Member("Member1", 10));
+		memberRepository.save(new Member("Member2", 10));
+		memberRepository.save(new Member("Member3", 10));
+		memberRepository.save(new Member("Member4", 10));
+		memberRepository.save(new Member("Member5", 10));
+
+		int age = 10;
+		PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "username"));//0~3개 가져와
+
+		//when
+		Page<Member> page = memberRepository.findByAge(age, pageRequest);
+		//Slice<Member> slice = memberRepository.findByAge(age, pageRequest);
+
+		Page<MemberDTO> toMap = page.map(m -> new MemberDTO(m.getId(), m.getUsername(), null));
+
+		//then
+		List<Member> content = page.getContent();
+		long totalElements = page.getTotalElements();
+
+		assertThat(content.size()).isEqualTo(3);
+		assertThat(page.getTotalElements()).isEqualTo(5);
+		assertThat(page.getNumber()).isEqualTo(0);
+		assertThat(page.getTotalPages()).isEqualTo(2);
+		assertThat(page.isFirst()).isTrue();
+		assertThat(page.hasNext()).isTrue();
+
 	}
 }
