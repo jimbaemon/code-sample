@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +29,8 @@ class MemberRepositoryTest {
 
 	@Autowired MemberRepository memberRepository;
 	@Autowired TeamRepository teamRepository;
+	@Autowired
+	EntityManager em;
 
 	@Test
 	@Description("스프링 데이터 JPA 테스트")
@@ -163,5 +167,103 @@ class MemberRepositoryTest {
 		assertThat(page.isFirst()).isTrue();
 		assertThat(page.hasNext()).isTrue();
 
+	}
+
+	@Test
+	public void bulkUpdate(){
+		//given
+		memberRepository.save(new Member("Member1", 10));
+		memberRepository.save(new Member("Member2", 19));
+		memberRepository.save(new Member("Member3", 20));
+		memberRepository.save(new Member("Member4", 21));
+		memberRepository.save(new Member("Member5", 40));
+
+		//when
+		int resultCount = memberRepository.bulkAgePlus(20);
+		//em.clear();
+
+		List<Member> member5 = memberRepository.findByUsername("Member5");
+		Member member = member5.get(0);
+
+
+
+		assertThat(resultCount).isEqualTo(3);
+		assertThat(member.getAge()).isEqualTo(41);
+	}
+
+	@Test
+	public void findMemberLazy(){
+		//given
+		//member1 -> teamA
+		//member2 -> teamB
+
+		Team teamA = new Team("teamA");
+		Team teamB = new Team("teamB");
+		teamRepository.save(teamA);
+		teamRepository.save(teamB);
+		Member member1 = new Member("member1", 10, teamA);
+		Member member2 = new Member("member1", 10, teamB);
+		memberRepository.save(member1);
+		memberRepository.save(member2);
+
+		em.flush();
+		em.clear();
+
+		List<Member> members = memberRepository.findEntityGraphByUsername("member1");
+		for (Member member : members) {
+			System.out.println("member = " + member);
+			System.out.println("member.team = " + member.getTeam().getName());
+		}
+	}
+
+	@Test
+	public void queryHint(){
+		//given
+		Member member1 = memberRepository.save(new Member("member1", 10));
+		em.flush();
+		em.clear();
+
+		//when
+		Member findMember = memberRepository.findReadOnlyByUsername("member1");
+		findMember.setUsername("member2");
+
+		em.flush();
+	}
+
+	@Test
+	public void lock(){
+		//given
+		Member member1 = memberRepository.save(new Member("member1", 10));
+		em.flush();
+		em.clear();
+
+		//when
+		List<Member> member11 = memberRepository.findLockByUsername("member1");
+	}
+
+	@Test
+	public void callCustom(){
+		List<Member> result = memberRepository.findMemberCustom();
+	}
+
+	@Test
+	public void JpaEventBaseEntity() throws Exception{
+		//given
+		Member member = new Member("member1");
+		memberRepository.save(member); //@PrePersist
+
+		member.setUsername("member2");
+
+		em.flush(); // @PreUpdate
+		em.clear();
+
+		//when
+		Member findMember = memberRepository.findById(member.getId()).get();
+
+		//then
+		System.out.println("findMember = " + findMember.getCreatedDate());
+		System.out.println("findMember = " + findMember.getLastModifiedDate());
+		System.out.println("findMember = " + findMember.getCreatedBy());
+		System.out.println("findMember = " + findMember.getLastModifiedBy());
 	}
 }
