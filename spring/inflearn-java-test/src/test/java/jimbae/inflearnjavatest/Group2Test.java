@@ -11,6 +11,6 @@ import org.junit.jupiter.api.Test;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Test
-@Tag("group1")
-public @interface group1Test {
+@Tag("group2")
+public @interface Group2Test {
 }
