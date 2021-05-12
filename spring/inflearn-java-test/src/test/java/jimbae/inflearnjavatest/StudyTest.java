@@ -20,10 +20,13 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.EnabledOnJre;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.converter.ArgumentConversionException;
@@ -37,8 +40,14 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import net.bytebuddy.implementation.bind.annotation.Empty;
 
+/*@ExtendWith(FindGroup1TestExtension.class)*/
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class StudyTest {
+
+	int value = 1;
+
+	@RegisterExtension
+	static FindGroup1TestExtension findGroup1TestExtension = new FindGroup1TestExtension(1000L);
 
 	@Test
 	@DisplayName("스터디 만들기")
@@ -46,7 +55,7 @@ class StudyTest {
 		// TODO : ThreadLocal 사용시 예상치 못한 오류 발생가능
 		assertTimeout(Duration.ofMillis(100), () -> {
 			new Study(10);
-			Thread.sleep(5000);
+			Thread.sleep(10);
 		});
 
 		IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class,
@@ -60,48 +69,43 @@ class StudyTest {
 			() -> assertEquals(StudyStatus.DRAFT, study.getStatus(), () -> "스터디를 처음 만들면 DRAFT 상태여야 한다."),
 			() -> assertTrue(study.getLimit() > 0, () -> "스터디 참가자는 0명 이상이여야 한다.")
 		);
+
+		System.out.println("value = " + value++);
 	}
 
 	@Test
 	@EnabledOnOs(OS.WINDOWS)
-	@EnabledOnJre({JRE.JAVA_8, JRE.JAVA_9})
+	@EnabledOnJre({JRE.JAVA_8, JRE.JAVA_9, JRE.JAVA_11})
 	void create1(){
 		String test_env = System.getenv("TEST_ENV");
 		System.out.println(test_env);
-		assumeTrue("LOCAL".equalsIgnoreCase(test_env));
 
-		assumingThat("LOCAL".equalsIgnoreCase(test_env), () -> {
-			System.out.println("create1");
-		});
-
-
+		System.out.println("value = " + value++);
 	}
 
 	@Test
-	@EnabledOnOs(OS.LINUX)
+	@DisabledOnOs(OS.WINDOWS)
 	void create2(){
 		String test_env = System.getenv("TEST_ENV");
 		System.out.println(test_env);
-		assumeTrue("LOCAL".equalsIgnoreCase(test_env));
 
-		assumingThat("LOCAL".equalsIgnoreCase(test_env), () -> {
-			System.out.println("create1");
-		});
-
-
+		System.out.println("value = " + value++);
 	}
 
 	@Test
 	@DisplayName("태그 그룹1")
-	@Tag("group1")
+	@Group1Test
 	void create_group1_1(){
 		System.out.println("group1");
+
+		System.out.println("value = " + value++);
 	}
 
 	@Test
 	@DisplayName("태그 그룹2")
-	@Tag("group2")
-	void create_group2_1(){
+	@Tag("group1")
+	void create_group2_1() throws InterruptedException {
+		Thread.sleep(1005L);
 		System.out.println("group2");
 	}
 
