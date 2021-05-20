@@ -1,12 +1,18 @@
 package jimbae.inflearnjavatest;
 
+
+
 public class Study {
+
+	private Long id;
 
 	private StudyStatus status;
 
 	private int limit;
 
 	private String name;
+
+	private Member owner;
 
 	public Study(int limit) {
 		if(limit < 0) {
@@ -38,5 +44,13 @@ public class Study {
 
 	public int getLimit() {
 		return limit;
+	}
+
+	public void setOwner(Member owner) {
+		this.owner = owner;
+	}
+
+	public Member getOwner(){
+		return owner;
 	}
 }

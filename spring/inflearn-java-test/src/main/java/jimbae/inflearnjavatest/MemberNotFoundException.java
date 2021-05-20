@@ -1,2 +1,4 @@
-package jimbae.inflearnjavatest;public class MemberNotFoundException {
+package jimbae.inflearnjavatest;
+
+public class MemberNotFoundException extends RuntimeException {
 }
